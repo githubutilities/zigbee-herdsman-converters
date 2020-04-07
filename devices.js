@@ -8538,6 +8538,97 @@ const devices = [
         description: 'RGB LED lamp',
         extend: generic.light_onoff_brightness_colortemp_colorxy,
     },
+
+
+    //SSJJ
+    {
+        zigbeeModel: ['FNB56-COS06FB1.7'],
+        model: 'FNB56-COS06FB1.7',
+        vendor: 'SSJJ',
+        description: 'Combustible gas sensor',
+        supports: 'gas',
+        fromZigbee: [fz.ias_gas_alarm_1],
+        toZigbee: [],
+    },     
+    {
+        zigbeeModel: ['FNB56-GAS05FB1.4'],
+        model: 'FNB56-GAS05FB1.4',
+        vendor: 'SSJJ',
+        description: 'Combustible gas sensor',
+        supports: 'gas',
+        fromZigbee: [fz.ias_gas_alarm_1],
+        toZigbee: [],
+    },           
+    {
+        zigbeeModel: ['FNB56-SMF06FB1.6'],
+        model: 'FNB56-SMF06FB1.6',
+        vendor: 'HEIMAN',
+        description: 'Smoke detector',
+        supports: 'smoke',
+        fromZigbee: [fz.heiman_smoke, fz.battery_200],
+        toZigbee: [],
+        meta: {configureKey: 1},
+        configure: async (device, coordinatorEndpoint) => {
+            const endpoint = device.getEndpoint(1);
+            await bind(endpoint, coordinatorEndpoint, ['genPowerCfg']);
+            await configureReporting.batteryPercentageRemaining(endpoint);
+        },           
+     },
+     {
+        zigbeeModel: ['FNB56-THM14FB2.4'],
+        model: 'FNB56-THM14FB2.4',
+        vendor: 'SSJJ',
+        description: 'Smart temperature & humidity Sensor',
+        supports: 'temperature and humidity',
+        fromZigbee: [fz.temperature, fz.humidity, fz.battery_3V],
+        toZigbee: [],
+        meta: {configureKey: 2},
+        configure: async (device, coordinatorEndpoint) => {
+            const endpoint1 = device.getEndpoint(1);
+            await bind(endpoint1, coordinatorEndpoint, ['msTemperatureMeasurement']);
+            const endpoint2 = device.getEndpoint(2);
+            await bind(endpoint2, coordinatorEndpoint, ['msRelativeHumidity', 'genPowerCfg']);
+            await configureReporting.temperature(endpoint1);
+            await configureReporting.humidity(endpoint2);
+            await configureReporting.batteryVoltage(endpoint2);
+            await configureReporting.batteryPercentageRemaining(endpoint2);      
+        },   
+     },   
+     {
+        zigbeeModel: ['FNB56-DOS07FB2.4'],
+        model: 'FNB56-DOS07FB2.4',
+        vendor: 'ORVIBO',
+        description: 'Door or window sensor',
+        supports: 'contact', fromZigbee: [fz.ias_contact_alarm_1, fz.battery_percentage_remaining],
+        toZigbee: [],
+       },
+     {
+        zigbeeModel: ['fdd76effa0e146b4bdafa0c203a37192'],
+        model: 'SM10ZW',
+        vendor: 'ORVIBO',
+        description: 'Door or window sensor',
+        supports: 'contact', fromZigbee: [fz.ias_contact_alarm_1, fz.battery_percentage_remaining],
+        toZigbee: [],
+       },
+     {
+        zigbeeModel: ['FNB56-WTS05FB2.0'],
+        model: 'FNB56-WTS05FB2.0',
+        vendor: 'SSJJ',
+        description: 'Water leakage sensor',
+        supports: 'water leak',
+        fromZigbee: [fz.ias_water_leak_alarm_1],
+        toZigbee: [],
+    },
+    {
+        zigbeeModel: ['FNB56-BOT06FB2.3'],
+        model: 'FNB56-BOT06FB2.3',
+        vendor: 'SSJJ',
+        description: 'Smart motion sensor',
+        supports: 'occupancy',
+        fromZigbee: [fz.iaszone_occupancy_1],
+        toZigbee: [],
+    },
+
 ];
 
 module.exports = devices.map((device) =>
